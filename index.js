@@ -1,8 +1,7 @@
-
 //---------------------------------- Credentials Section ----------------------------------//
 // All credentials come from credentials.js which isnt on github
 
-// Information needed to access the api.ai bot, only thing needed to be changed 
+// Information needed to access the api.ai bot, only thing needed to be changed
 // Emoji Bot
 var accessToken = credentialsAccessToken;
 
@@ -19,10 +18,10 @@ var config = credentialsConfig;
 // TODO: Replace with your project's config object
 // You can get this information by creating a project and clicking connect with web or start with web
 // var config = {
-// 	apiKey: "apiKey",
-// 	authDomain: "projectId.firebaseapp.com",
-// 	databaseURL: "https://databaseName.firebaseio.com",
-// 	storageBucket: "bucket.appspot.com"
+//      apiKey: "apiKey",
+//      authDomain: "projectId.firebaseapp.com",
+//      databaseURL: "https://databaseName.firebaseio.com",
+//      storageBucket: "bucket.appspot.com"
 // };
 
 
@@ -43,138 +42,138 @@ var DEFAULT_TIME_DELAY = 3000;
 
 // Variable for the chatlogs div
 var $chatlogs = $('.chatlogs');
-	
+
 
 $('document').ready(function(){
-	
-	// Hide the switch input type button initially
-	$("#switchInputType").toggle();
 
-	// If the switch input type button is pressed
-	$("#switchInputType").click(function(event) {
+        // Hide the switch input type button initially
+        $("#switchInputType").toggle();
 
-		// Toggle which input type is shown
-		if($('.buttonResponse').is(":visible")) {
-			$("#switchInputType").attr("src", "Images/multipleChoice.png");
-		}
+        // If the switch input type button is pressed
+        $("#switchInputType").click(function(event) {
 
-		else {
-			$("#switchInputType").attr("src", "Images/keyboard.png");
-		}
-		$('textarea').toggle();
-		$('.buttonResponse').toggle();
+                // Toggle which input type is shown
+                if($('.buttonResponse').is(":visible")) {
+                        $("#switchInputType").attr("src", "Images/multipleChoice.png");
+                }
 
-	});
+                else {
+                        $("#switchInputType").attr("src", "Images/keyboard.png");
+                }
+                $('textarea').toggle();
+                $('.buttonResponse').toggle();
 
-
-
-
-	//----------------------User Sends Message Methods--------------------------------//
-	// Method which executes once the enter key on the keyboard is pressed
-	// Primary function sends the text which the user typed
-	$("textarea").keypress(function(event) {
-		
-		// If the enter key is pressed
-		if(event.which === 13) {
-
-			// Ignore the default function of the enter key(Dont go to a new line)
-			event.preventDefault();
-
-			ButtonClicked = false;
-
-			// Call the method for sending a message, pass in the text from the user
-			send(this.value);
-			
-			// reset the size of the text area
-			$(".input").attr("rows", "1");
-
-			// Clear the text area
-			this.value = "";
-
-			if($("#switchInputType").is(":visible")) {
-				$("#switchInputType").toggle();
-				$('.buttonResponse').remove();
-			}
-
-		}
-	});
-
-
-	// If the user presses the button for voice input
-	$("#rec").click(function(event) {
-
-		// Call the method to switch recognition to voice input
-		switchRecognition();
-	});
+        });
 
 
 
-	// If the user selects one of the dynamic button responses
-	$('.chat-form').on("click", '.buttonResponse', function() {
 
-		ButtonClicked = true;
+        //----------------------User Sends Message Methods--------------------------------//
+        // Method which executes once the enter key on the keyboard is pressed
+        // Primary function sends the text which the user typed
+        $("textarea").keypress(function(event) {
 
-		// Send the text on the button as a user message
-		send(this.innerText);
-		
-		// Show the record button and text input area
-		//$('#rec').toggle();
-		$('textarea').toggle();
+                // If the enter key is pressed
+                if(event.which === 13) {
 
-		// Hide the button responses and the switch input button
-		$('.buttonResponse').toggle();
-		$('#switchInputType').hide();
+                        // Ignore the default function of the enter key(Dont go to a new line)
+                        event.preventDefault();
 
-		// Remove the button responses from the div
-		$('.buttonResponse').remove();
-		
-	});
+                        ButtonClicked = false;
+
+                        // Call the method for sending a message, pass in the text from the user
+                        send(this.value);
+
+                        // reset the size of the text area
+                        $(".input").attr("rows", "1");
+
+                        // Clear the text area
+                        this.value = "";
+
+                        if($("#switchInputType").is(":visible")) {
+                                $("#switchInputType").toggle();
+                                $('.buttonResponse').remove();
+                        }
+
+                }
+        });
+
+
+        // If the user presses the button for voice input
+        $("#rec").click(function(event) {
+
+                // Call the method to switch recognition to voice input
+                switchRecognition();
+        });
+
+
+
+        // If the user selects one of the dynamic button responses
+        $('.chat-form').on("click", '.buttonResponse', function() {
+
+                ButtonClicked = true;
+
+                // Send the text on the button as a user message
+                send(this.innerText);
+
+                // Show the record button and text input area
+                //$('#rec').toggle();
+                $('textarea').toggle();
+
+                // Hide the button responses and the switch input button
+                $('.buttonResponse').toggle();
+                $('#switchInputType').hide();
+
+                // Remove the button responses from the div
+                $('.buttonResponse').remove();
+
+        });
 
 })
 
 
 // Method which takes the users text and sends an AJAX post request to API.AI
-// Creates a new Div with the users text, and recieves a response message from API.AI 
+// Creates a new Div with the users text, and recieves a response message from API.AI
 function send(text) {
 
-	// Create a div with the text that the user typed in
-	$chatlogs.append(
+        // Create a div with the text that the user typed in
+        $chatlogs.append(
         $('<div/>', {'class': 'chat self'}).append(
             $('<p/>', {'class': 'chat-message', 'text': text})));
 
-	// Find the last message in the chatlogs
-	var $sentMessage = $(".chatlogs .chat").last();
-	
-	// Check to see if that message is visible
-	checkVisibility($sentMessage);
+        // Find the last message in the chatlogs
+        var $sentMessage = $(".chatlogs .chat").last();
 
-	// update the last message sent variable to be stored in the database and store in database
-	lastSentMessage = text;
-	storeMessageToDB();
+        // Check to see if that message is visible
+        checkVisibility($sentMessage);
+
+        // update the last message sent variable to be stored in the database and store in database
+        lastSentMessage = text;
+        storeMessageToDB();
 
 
-	// AJAX post request, sends the users text to API.AI and 
-	// calls the method newReceivedMessage with the response from API.AI
-	$.ajax({
-		type: "POST",
-		url: baseUrl + "query?v=20150910",
-		contentType: "application/json; charset=utf-8",
-		dataType: "json",
-		headers: {
-			"Authorization": "Bearer " + accessToken
-		},
-		data: JSON.stringify({ query: text, lang: "en", sessionId: "somerandomthing" }),
-		success: function(data) {
+        // AJAX post request, sends the users text to API.AI and
+        // calls the method newReceivedMessage with the response from API.AI
+        $.ajax({
+                type: "POST",
+                url: baseUrl + "query?v=20150910",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                headers: {
+                        "Authorization": "Bearer " + accessToken
+                },
+                data: JSON.stringify({ query: text, lang: "en", sessionId: "somerandomthing" }),
+                success: function(data) {
             console.log(data);
-		
-		// Pass the response into the method 
-		newRecievedMessage(JSON.stringify(data.result.fulfillment.speech, undefined, 2));
 
-		},
-		error: function() {
-			newRecievedMessage("Internal Server Error");
-		}
-	});
+                // Pass the response into the method
+                newRecievedMessage(JSON.stringify(data.result.fulfillment.speech, undefined, 2));
+
+                },
+                error: function() {
+                        newRecievedMessage("Internal Server Error");
+                }
+        });
 }
 
 
@@ -187,36 +186,36 @@ function send(text) {
 // Splits between the button messages, multi messages and single message
 function newRecievedMessage(messageText) {
 
-	// Variable storing the message with the "" removed
-	var removedQuotes = messageText.replace(/[""]/g,"");
+        // Variable storing the message with the "" removed
+        var removedQuotes = messageText.replace(/[""]/g,"");
 
-	// update the last message recieved variable for storage in the database
-	lastRecievedMessage = removedQuotes;
+        // update the last message recieved variable for storage in the database
+        lastRecievedMessage = removedQuotes;
 
-	// If the message contains a <ar then it is a message
-	// whose responses are buttons
-	if(removedQuotes.includes("<ar"))
-	{
-		buttonResponse(removedQuotes);	
-	}
+        // If the message contains a <ar then it is a message
+        // whose responses are buttons
+        if(removedQuotes.includes("<ar"))
+        {
+                buttonResponse(removedQuotes);
+        }
 
-	// if the message contains only <br then it is a multi line message
-	else if (removedQuotes.includes("<br")) 
-	{
-		multiMessage(removedQuotes);
-	} 
+        // if the message contains only <br then it is a multi line message
+        else if (removedQuotes.includes("<br"))
+        {
+                multiMessage(removedQuotes);
+        }
 
-	// There arent multiple messages to be sent, or message with buttons
-	else
-	{	
-		// Show the typing indicator
-		showLoading();
+        // There arent multiple messages to be sent, or message with buttons
+        else
+        {
+                // Show the typing indicator
+                showLoading();
 
-		// After 3 seconds call the createNewMessage function
-		setTimeout(function() {
-			createNewMessage(removedQuotes);
-		}, DEFAULT_TIME_DELAY);
-	}
+                // After 3 seconds call the createNewMessage function
+                setTimeout(function() {
+                        createNewMessage(removedQuotes);
+                }, DEFAULT_TIME_DELAY);
+        }
 }
 
 
@@ -228,68 +227,68 @@ function newRecievedMessage(messageText) {
 function multiMessage(message)
 {
 
-	// Stores the matches in the message, which match the regex
-	var matches;
+        // Stores the matches in the message, which match the regex
+        var matches;
 
-	// List of message objects, each message will have a text and time delay
-	var listOfMessages = [];
-	
-	// Regex used to find time delay and text of each message
-	var regex = /\<br(?:\s+?(\d+))?\>(.*?)(?=(?:\<br(?:\s+\d+)?\>)|$)/g;
+        // List of message objects, each message will have a text and time delay
+        var listOfMessages = [];
 
-	// While matches are still being found in the message
-	while(matches = regex.exec(message))
-	{
-		// if the time delay is undefined(empty) use the default time delay
-		if(matches[1] == undefined)
-		{
-			matches[1] = DEFAULT_TIME_DELAY;
-		}
+        // Regex used to find time delay and text of each message
+        var regex = /\<br(?:\s+?(\d+))?\>(.*?)(?=(?:\<br(?:\s+\d+)?\>)|$)/g;
 
-		// Create an array of the responses which will be buttons
-		var messageText  = matches[2].split(/<ar>/);
+        // While matches are still being found in the message
+        while(matches = regex.exec(message))
+        {
+                // if the time delay is undefined(empty) use the default time delay
+                if(matches[1] == undefined)
+                {
+                        matches[1] = DEFAULT_TIME_DELAY;
+                }
 
-		// Create a message object and add it to the list of messages
-		listOfMessages.push({
-				text: messageText[0],
-				delay: matches[1]
-		});
-	}
+                // Create an array of the responses which will be buttons
+                var messageText  = matches[2].split(/<ar>/);
+
+                // Create a message object and add it to the list of messages
+                listOfMessages.push({
+                                text: messageText[0],
+                                delay: matches[1]
+                });
+        }
 
 
-	// loop index 
-	var i = 0;
+        // loop index
+        var i = 0;
 
-	// Variable for the number of messages
-	var numMessages = listOfMessages.length;
+        // Variable for the number of messages
+        var numMessages = listOfMessages.length;
 
-	// Show the typing indicator
-	showLoading();
+        // Show the typing indicator
+        showLoading();
 
-	// Function which calls the method createNewMessage after waiting on the message delay
-	(function theLoop (listOfMessages, i, numMessages) 
-	{
+        // Function which calls the method createNewMessage after waiting on the message delay
+        (function theLoop (listOfMessages, i, numMessages)
+        {
 
-		// Method which executes after the timedelay
-		setTimeout(function () 
-		{
+                // Method which executes after the timedelay
+                setTimeout(function ()
+                {
 
-			// Create a new message from the server
-			createNewMessage(listOfMessages[i].text);
-			
-			// If there are still more messages
-			if (i++ < numMessages - 1) 
-			{   
-				// Show the typing indicator
-				showLoading();             
+                        // Create a new message from the server
+                        createNewMessage(listOfMessages[i].text);
 
-				// Call the method again
-				theLoop(listOfMessages, i, numMessages);
-			}
-		}, listOfMessages[i].delay);
-	
-	// Pass the parameters back into the method
-	})(listOfMessages, i, numMessages);
+                        // If there are still more messages
+                        if (i++ < numMessages - 1)
+                        {
+                                // Show the typing indicator
+                                showLoading();
+
+                                // Call the method again
+                                theLoop(listOfMessages, i, numMessages);
+                        }
+                }, listOfMessages[i].delay);
+
+        // Pass the parameters back into the method
+        })(listOfMessages, i, numMessages);
 
 }
 
@@ -303,73 +302,73 @@ function multiMessage(message)
 function buttonResponse(message)
 {
 
-	// Stores the matches in the message, which match the regex
-	var matches;
+        // Stores the matches in the message, which match the regex
+        var matches;
 
-	// Used to store the new HTML div which will be the button	
-	var $input;
+        // Used to store the new HTML div which will be the button
+        var $input;
 
-	// send the message to the multi message method to split it up, message will be sent here
-	multiMessage(message);
-	
-	// Regex used to find time delay, text of the message and responses to be buttons
-	var regex = /\<br(?:\s+?(\d+))?\>(.*?)(?=(?:\<ar(?:\s+\d+)?\>)|$)/g;
+        // send the message to the multi message method to split it up, message will be sent here
+        multiMessage(message);
 
-	// Seach the message and capture the groups which match the regex
-	matches = regex.exec(message);
+        // Regex used to find time delay, text of the message and responses to be buttons
+        var regex = /\<br(?:\s+?(\d+))?\>(.*?)(?=(?:\<ar(?:\s+\d+)?\>)|$)/g;
 
-	console.log(matches);
+        // Seach the message and capture the groups which match the regex
+        matches = regex.exec(message);
 
-	// Create an array of the responses which will be buttons
-	var buttonList = message.split(/<ar>/);
+        console.log(matches);
 
-	// Remove the first element, The first split is the actual message
-	buttonList = buttonList.splice(1);
+        // Create an array of the responses which will be buttons
+        var buttonList = message.split(/<ar>/);
 
-	console.log(buttonList);
+        // Remove the first element, The first split is the actual message
+        buttonList = buttonList.splice(1);
 
-	// Array which will store all of the newly created buttons
-	var listOfInputs = [];
+        console.log(buttonList);
 
-	// Loop through each response and create a button
-	for (var index = 0; index < buttonList.length; index++)
-	{
-		// Store the current button response
-		var response = buttonList[index];
-		
-		// Create a new div element with the text for the current button response
-		$input = $('<div/>', {'class': 'buttonResponse' }).append(
+        // Array which will store all of the newly created buttons
+        var listOfInputs = [];
+
+        // Loop through each response and create a button
+        for (var index = 0; index < buttonList.length; index++)
+        {
+                // Store the current button response
+                var response = buttonList[index];
+
+                // Create a new div element with the text for the current button response
+                $input = $('<div/>', {'class': 'buttonResponse' }).append(
             $('<p/>', {'class': 'chat-message', 'text': response}));
 
-		// add the new button to the list of buttons
-		listOfInputs.push($input);
-	}
+                // add the new button to the list of buttons
+                listOfInputs.push($input);
+        }
 
 
-	// Show the typing indicator
-	showLoading();
-	
-	// After the time delay call the createNewMessage function
-	setTimeout(function() {
-			
-		
-		// Hide the send button and the text area
-		// $('#rec').toggle();
-		$('textarea').toggle();
+        // Show the typing indicator
+        showLoading();
 
-		// Show the switch input button
-		$("#switchInputType").show();
+        // After the time delay call the createNewMessage function
+        setTimeout(function() {
 
-		// For each of the button responses
-		for (var index = 0; index < listOfInputs.length; index++) {
-						
-			// Append to the chat-form div which is at the bottom of the chatbox
-			listOfInputs[index].appendTo($('#buttonDiv'));
-		}
 
-			
-		
-	}, matches[1]);
+                // Hide the send button and the text area
+                // $('#rec').toggle();
+                $('textarea').toggle();
+
+                // Show the switch input button
+                $("#switchInputType").show();
+
+                // For each of the button responses
+                for (var index = 0; index < listOfInputs.length; index++) {
+
+                        // Append to the chat-form div which is at the bottom of the chatbox
+                        listOfInputs[index].appendTo($('#buttonDiv'));
+                }
+
+
+
+        }, matches[1]);
 
 }
 
@@ -379,27 +378,27 @@ function buttonResponse(message)
 // Method to create a new div showing the text from API.AI
 function createNewMessage(message) {
 
-	// Hide the typing indicator
-	hideLoading();
+        // Hide the typing indicator
+        hideLoading();
 
-	// take the message and say it back to the user.
-	//speechResponse(message);
+        // take the message and say it back to the user.
+        //speechResponse(message);
 
-	// // Show the send button and the text area
-	// $('#rec').css('visibility', 'visible');
-	// $('textarea').css('visibility', 'visible');
+        // // Show the send button and the text area
+        // $('#rec').css('visibility', 'visible');
+        // $('textarea').css('visibility', 'visible');
 
-	// Append a new div to the chatlogs body, with an image and the text from API.AI
-	$chatlogs.append(
-		$('<div/>', {'class': 'chat friend'}).append(
-			$('<div/>', {'class': 'user-photo'}).append($('<img src="Images/ana.JPG" />')), 
-			$('<p/>', {'class': 'chat-message', 'text': message})));
+        // Append a new div to the chatlogs body, with an image and the text from API.AI
+        $chatlogs.append(
+                $('<div/>', {'class': 'chat friend'}).append(
+                        $('<div/>', {'class': 'user-photo'}).append($('<img src="Images/ana.JPG" />')),
+                        $('<p/>', {'class': 'chat-message', 'text': message})));
 
-	// Find the last message in the chatlogs
-	var $newMessage = $(".chatlogs .chat").last();
+        // Find the last message in the chatlogs
+        var $newMessage = $(".chatlogs .chat").last();
 
-	// Call the method to see if the message is visible
-	checkVisibility($newMessage);
+        // Call the method to see if the message is visible
+        checkVisibility($newMessage);
 }
 
 
@@ -408,25 +407,25 @@ function createNewMessage(message) {
 //------------------------------------------- Database Write --------------------------------------------------//
 
 function storeMessageToDB() {
-  
-	var date = new Date();
-	console.log(date);
-	if (lastRecievedMessage == 1) {
- 		var storeMessage = firebase.database().ref(botName).child(newKey).push({
-    		UserResponse: lastSentMessage,
-			Time: date + ""
-		});
-  	}
-	
-	else {
 
-		var storeMessage = firebase.database().ref(botName).child(newKey).push({
-    		Question: lastRecievedMessage,
-    		UserResponse: lastSentMessage,
-			ButtonClicked: ButtonClicked,
-			Time: date + ""
-  		});
-	}
+        var date = new Date();
+        console.log(date);
+        if (lastRecievedMessage == 1) {
+                var storeMessage = firebase.database().ref(botName).child(newKey).push({
+                UserResponse: lastSentMessage,
+                        Time: date + ""
+                });
+        }
+
+        else {
+
+                var storeMessage = firebase.database().ref(botName).child(newKey).push({
+                Question: lastRecievedMessage,
+                UserResponse: lastSentMessage,
+                        ButtonClicked: ButtonClicked,
+                        Time: date + ""
+                });
+        }
 
 }
 
@@ -437,13 +436,13 @@ function storeMessageToDB() {
 // As well as hides the textarea and send button
 function showLoading()
 {
-	$chatlogs.append($('#loadingGif'));
-	$("#loadingGif").show();
+        $chatlogs.append($('#loadingGif'));
+        $("#loadingGif").show();
 
-	// $('#rec').css('visibility', 'hidden');
-	// $('textarea').css('visibility', 'hidden');
+        // $('#rec').css('visibility', 'hidden');
+        // $('textarea').css('visibility', 'hidden');
 
-	$('.chat-form').css('visibility', 'hidden');
+        $('.chat-form').css('visibility', 'hidden');
  }
 
 
@@ -451,15 +450,15 @@ function showLoading()
 // Function which hides the typing indicator
 function hideLoading()
 {
-	$('.chat-form').css('visibility', 'visible');
-	$("#loadingGif").hide();
+        $('.chat-form').css('visibility', 'visible');
+        $("#loadingGif").hide();
 
-	// Clear the text area of text
-	$(".input").val("");
+        // Clear the text area of text
+        $(".input").val("");
 
-	// reset the size of the text area
-	$(".input").attr("rows", "1");
-	
+        // reset the size of the text area
+        $(".input").attr("rows", "1");
+
 }
 
 
@@ -467,8 +466,8 @@ function hideLoading()
 // Method which checks to see if a message is in visible
 function checkVisibility(message)
 {
-	// Scroll the view down a certain amount
-	$chatlogs.stop().animate({scrollTop: $chatlogs[0].scrollHeight});
+        // Scroll the view down a certain amount
+        $chatlogs.stop().animate({scrollTop: $chatlogs[0].scrollHeight});
 }
 
 
@@ -482,99 +481,99 @@ var recognition;
 function startRecognition() {
 
     console.log("Start")
-	recognition = new webkitSpeechRecognition();
+        recognition = new webkitSpeechRecognition();
 
-	recognition.onstart = function(event) {
+        recognition.onstart = function(event) {
 
         console.log("Update");
-		updateRec();
-	};
-	
-	recognition.onresult = function(event) {
-	
-		var text = "";
-	
-		for (var i = event.resultIndex; i < event.results.length; ++i) {
-			text += event.results[i][0].transcript;
-		}
-	
-		setInput(text);
-		stopRecognition();
-	
-	};
-	
-	recognition.onend = function() {
-		stopRecognition();
-	};
-	
-	recognition.lang = "en-US";
-	recognition.start();
+                updateRec();
+        };
+
+        recognition.onresult = function(event) {
+
+                var text = "";
+
+                for (var i = event.resultIndex; i < event.results.length; ++i) {
+                        text += event.results[i][0].transcript;
+                }
+
+                setInput(text);
+                stopRecognition();
+
+        };
+
+        recognition.onend = function() {
+                stopRecognition();
+        };
+
+        recognition.lang = "ru-RU";
+        recognition.start();
 
 }
 
 
 
 function stopRecognition() {
-	if (recognition) {
+        if (recognition) {
         console.log("Stop Recog");
-		recognition.stop();
-		recognition = null;
-	}
-	updateRec();
+                recognition.stop();
+                recognition = null;
+        }
+        updateRec();
 }
 
 
 
 function switchRecognition() {
-	if (recognition) {
+        if (recognition) {
         console.log(" Stop if");
-		stopRecognition();
-	} else {
-		startRecognition();
-	}
+                stopRecognition();
+        } else {
+                startRecognition();
+        }
 }
 
 
 function setInput(text) {
-	$(".input").val(text);
-	
+        $(".input").val(text);
+
     send(text);
-	
+
     $(".input").val("");
-    
+
 }
 
 
 function updateRec() {
-	
 
-	if (recognition) {
-		$("#rec").attr("src", "Images/MicrophoneOff.png");
-	} else {
-		$("#rec").attr("src", "Images/microphone.png");
 
-	}
+        if (recognition) {
+                $("#rec").attr("src", "Images/MicrophoneOff.png");
+        } else {
+                $("#rec").attr("src", "Images/microphone.png");
+
+        }
 }
 
 function speechResponse(message)
 {
 
-	var msg = new SpeechSynthesisUtterance();
+        var msg = new SpeechSynthesisUtterance();
 
-	// These lines list all of the voices which can be used in speechSynthesis
-	//var voices = speechSynthesis.getVoices();
-	//console.log(voices);
-	
-	
-	msg.default = false;
- 	msg.voiceURI = "Fiona";
-	msg.name = "Fiona";
-	msg.localService = true;
-  	msg.text = message;
-  	msg.lang = "en";
-	msg.rate = .9;
-	msg.volume = 1;
-  	window.speechSynthesis.speak(msg);
+        // These lines list all of the voices which can be used in speechSynthesis
+        //var voices = speechSynthesis.getVoices();
+        //console.log(voices);
+
+
+        msg.default = false;
+        msg.voiceURI = "Fiona";
+        msg.name = "Fiona";
+        msg.localService = true;
+        msg.text = message;
+        msg.lang = "ru";
+        msg.rate = .9;
+        msg.volume = 1;
+        window.speechSynthesis.speak(msg);
 
 }
 
@@ -594,5 +593,5 @@ $(document)
         this.rows = minRows;
         rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 17);
         this.rows = minRows + rows;
-	});
-	
+        });
+
