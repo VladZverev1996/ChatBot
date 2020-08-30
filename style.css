@@ -9,12 +9,12 @@
 }
 
 body {
-    background: rgb(39, 119, 180);
+    background: rgb(19, 19, 180);
 }
 
 .chatbox {
-    
-    width: 500px;
+
+    width: 450px;
     min-width: 390px;
     height: 600px;
     background: white;
@@ -123,7 +123,7 @@ body {
     min-width: 390px;
     align-items: flex-start;
     overflow: auto;
-    background: rgb(244, 243, 244);
+    background: rgb(44, 243, 244);
     border-radius: 0 0 10px 10px;
     border-top: 5px solid rgb(212, 212, 212);
 
@@ -133,12 +133,12 @@ body {
 #inputDiv {
     width: 75%;
     margin-right: 15px;
-    
+
 }
 
 
 .chat-form textarea {
-    padding: 5px 5px 5px 15px; 
+    padding: 5px 5px 5px 15px;
     background: #fbfbfb;
     width: 100%;
     min-height: 5px;
@@ -209,7 +209,7 @@ body {
 #switchInputType{
     max-width: 40px;
     max-height: 40px;
-   
+
 }
 
 #rec {
@@ -222,5 +222,3 @@ body {
     width: inherit;
 
 }
-
-
